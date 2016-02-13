@@ -56,11 +56,15 @@
       this.$crumbsList = this.element;
       this.$crumbs = $('li', this.$crumbsList);
       this.$lastCrumb = this.$crumbs.last();
+      this.$firstCrumb = this.$crumbs.first();
       this.reversedCrumbs = $('li', this.$crumbsList).get().reverse();
       this.lastNbCrumbDisplayed = 0;
       this.totalCrumbsWidth = 0;
       this.fixedCrumbsWidth = 0;
       this._initCrumbs();
+
+      // Insert a hidden ellipsis at the front of the list
+      this.$frontEllipsis = $('<a href="" class="hide">...</a>').insertBefore(this.$firstCrumb);
 
       if (this.options.nbFixedCrumbs > 0) {
         var nbCrumbs = this.$crumbs.length;
@@ -170,6 +174,16 @@
       });
 
       this.lastNbCrumbDisplayed = this.nbCrumbDisplayed;
+
+      var numHidden = $('li.hide').length;
+      if (numHidden) {
+        var href = $('li.hide', this.$crumbsList).last().children('a').attr('href');
+        this.$frontEllipsis.attr('href', href);
+        this.$frontEllipsis.removeClass('hide');
+
+      } else {
+        this.$frontEllipsis.addClass('hide');
+      }
 
       this.options.callback.postCrumbsListDisplay(this);
 
