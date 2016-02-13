@@ -3,35 +3,19 @@ html {
   overflow-x: hidden;
 }
 .rcrumbs {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 14px;
-  line-height: 18px;
   white-space: nowrap;
 }
-.rcrumbs > ul {
-  padding: 0;
+.rcrumbs > ol {
   list-style: none;
 }
-.rcrumbs > ul > li {
+.rcrumbs > ol > li {
   overflow: hidden;
-  display: none;
 }
-.rcrumbs > ul > li.show {
+.rcrumbs > ol > li.show {
   display: inline-block;
 }
-.rcrumbs > ul > li.ellipsis {
+.rcrumbs > ol > li.ellipsis {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   overflow: hidden;
-}
-.rcrumbs a {
-  color: #4682b4;
-  text-decoration: none;
-}
-.rcrumbs a:hover {
-  color: #565c6e;
-}
-.rcrumbs .divider {
-  color: #cccccc;
-  padding: 0 5px;
 }

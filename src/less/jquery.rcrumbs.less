@@ -7,16 +7,10 @@ body, html {
 }
 
 .rcrumbs {
-  font-family: @font-family;
-  font-size: @font-size;
-  line-height: @line-height;
-
   //Avoid words wrapping when animating crumbs
   white-space: nowrap;
 
-  > ul {
-    //Remove padding defined by the user agent
-    padding: 0;
+  > ol {
     //needed to remove bullets on IE7
     list-style: none;
 
@@ -24,7 +18,6 @@ body, html {
       //Avoid small vertical shift on li when animation is executed on IE browser.
       //This happen because jquery animation set overflow:hidden when animating an element.
       overflow: hidden;
-      display: none;
       &.show {
         display: inline-block;
       }
@@ -34,18 +27,6 @@ body, html {
         overflow: hidden;
       }
     }
-  }
-
-  a {
-    color: @link-color;
-    text-decoration: none;
-    &:hover {
-      color: @link-hover-color;
-    }
-  }
-  .divider {
-    color: @divider-color;
-    padding: 0 5px;
   }
 }
 

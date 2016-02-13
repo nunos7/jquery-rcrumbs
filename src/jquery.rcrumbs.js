@@ -49,14 +49,10 @@
     },
 
     _init: function () {
-      //Ensure rcrumbs class is defined on the element in order to be able to correctly apply stylesheets
-      if (!this.$element.hasClass('rcrumbs')) {
-        this.$element.addClass('rcrumbs');
-      }
 
       //Variables declaration
       this.nbCrumbDisplayed = 0;
-      this.$crumbsList = $('ul', this.element);
+      this.$crumbsList = $('ol', this.element);
       this.$crumbs = $('li', this.$crumbsList);
       this.$lastCrumb = this.$crumbs.last();
       this.reversedCrumbs = $('li', this.$crumbsList).get().reverse();
@@ -72,7 +68,7 @@
         var that = this;
         $('li', this.$crumbsList).slice(0, this.options.nbFixedCrumbs).each(function (index, crumb) {
           that.totalCrumbsWidth += $(crumb).data('width');
-          $(crumb).addClass('show');
+          $(crumb).removeClass('hide');
         });
       }
 
@@ -96,7 +92,14 @@
         position: 'absolute'
       });
 
-      elementClone.appendTo(this.$crumbsList);
+      // First element must have its width tested at the beginning to ignore divider.
+      var index = $('li').index(element);
+
+      if (index) {
+        elementClone.appendTo(this.$crumbsList);
+      } else {
+        elementClone.insertBefore(this.$crumbsList);
+      }
 
       result = elementClone.width();
 
@@ -192,7 +195,7 @@
           if (this.lastNbCrumbDisplayed > this.nbCrumbDisplayed - 1 && this.options.animation.activated) {
             hideCrumbWithAnimation();
           } else {
-            $crumb.removeClass('show');
+            $crumb.addClass('hide');
           }
 
           if (!this.nextCrumbToShowWidth) {
@@ -202,7 +205,7 @@
       }
 
       function showCrumbWithOrWithoutAnimation() {
-        $crumb.addClass('show');
+        $crumb.removeClass('hide');
 
         if (that.lastNbCrumbDisplayed < (that.nbCrumbDisplayed + 1) && that.options.animation.activated && !disableAnimation) {
           $crumb.width(0);
@@ -217,7 +220,7 @@
 
       function hideCrumbWithAnimation() {
         $crumb.animate({width: 0}, that.options.animation.speed, function () {
-          $crumb.removeClass('show');
+          $crumb.addClass('hide');
         });
       }
 
