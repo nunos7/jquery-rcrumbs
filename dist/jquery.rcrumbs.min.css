@@ -1,1 +1,1 @@
-body,html{overflow-x:hidden}.rcrumbs{white-space:nowrap}.rcrumbs>ol{list-style:none}.rcrumbs>ol>li{overflow:hidden}.rcrumbs>ol>li.show{display:inline-block}.rcrumbs>ol>li.ellipsis{text-overflow:ellipsis;-o-text-overflow:ellipsis;overflow:hidden}
+body,html{overflow-x:hidden}ol.breadcrumb-responsive{white-space:nowrap;list-style:none}ol.breadcrumb-responsive>li{overflow:hidden}ol.breadcrumb-responsive>li.show{display:inline-block}ol.breadcrumb-responsive>li.ellipsis{text-overflow:ellipsis;-o-text-overflow:ellipsis;overflow:hidden}

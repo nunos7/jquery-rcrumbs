@@ -34,7 +34,6 @@
       <pre>$("...").rcrumbs()</pre>
     </div>
   </div>
-  <div class="rcrumbs" id="breadcrumbs">
     <ol class="breadcrumb breadcrumb-responsive">
       <li><a href="javascript:">Home</a></li>
       <li><a href="javascript:">jQuery plugins</a></li>
@@ -44,11 +43,10 @@
       <li><a href="javascript:">Demo</a></li>
       <li><a href="javascript:">This is a demonstration to show how the rCrumbs jQuery plugin works</a></li>
     </ol>
-  </div>
 </div>
 
   <script>
-    $("#breadcrumbs").rcrumbs({nbUncollapsableCrumbs: 1, animation: {activated: false}});
+    $(".breadcrumb-responsive").rcrumbs({nbUncollapsableCrumbs: 1, animation: {activated: false}});
 
     $('.description-toggler').on('click', function () {
       $(this).next('.details').first().toggle();

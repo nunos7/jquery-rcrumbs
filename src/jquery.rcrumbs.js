@@ -52,7 +52,7 @@
 
       //Variables declaration
       this.nbCrumbDisplayed = 0;
-      this.$crumbsList = $('ol', this.element);
+      this.$crumbsList = this.element;
       this.$crumbs = $('li', this.$crumbsList);
       this.$lastCrumb = this.$crumbs.last();
       this.reversedCrumbs = $('li', this.$crumbsList).get().reverse();

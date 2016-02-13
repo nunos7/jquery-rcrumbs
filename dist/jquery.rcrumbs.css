@@ -2,19 +2,17 @@ body,
 html {
   overflow-x: hidden;
 }
-.rcrumbs {
+ol.breadcrumb-responsive {
   white-space: nowrap;
-}
-.rcrumbs > ol {
   list-style: none;
 }
-.rcrumbs > ol > li {
+ol.breadcrumb-responsive > li {
   overflow: hidden;
 }
-.rcrumbs > ol > li.show {
+ol.breadcrumb-responsive > li.show {
   display: inline-block;
 }
-.rcrumbs > ol > li.ellipsis {
+ol.breadcrumb-responsive > li.ellipsis {
   text-overflow: ellipsis;
   -o-text-overflow: ellipsis;
   overflow: hidden;

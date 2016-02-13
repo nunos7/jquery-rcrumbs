@@ -6,28 +6,22 @@ body, html {
   overflow-x: hidden;
 }
 
-.rcrumbs {
-  //Avoid words wrapping when animating crumbs
+ol.breadcrumb-responsive {
   white-space: nowrap;
+  //needed to remove bullets on IE7
+  list-style: none;
 
-  > ol {
-    //needed to remove bullets on IE7
-    list-style: none;
-
-    > li {
-      //Avoid small vertical shift on li when animation is executed on IE browser.
-      //This happen because jquery animation set overflow:hidden when animating an element.
+  > li {
+    //Avoid small vertical shift on li when animation is executed on IE browser.
+    //This happen because jquery animation set overflow:hidden when animating an element.
+    overflow: hidden;
+    &.show {
+      display: inline-block;
+    }
+    &.ellipsis {
+      text-overflow: ellipsis;
+      -o-text-overflow: ellipsis;
       overflow: hidden;
-      &.show {
-        display: inline-block;
-      }
-      &.ellipsis {
-        text-overflow: ellipsis;
-        -o-text-overflow: ellipsis;
-        overflow: hidden;
-      }
     }
   }
 }
-
-
