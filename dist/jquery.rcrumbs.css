@@ -1,19 +1,10 @@
-body,
-html {
-  overflow-x: hidden;
-}
 ol.breadcrumb-responsive {
   white-space: nowrap;
-  list-style: none;
 }
 ol.breadcrumb-responsive > li {
-  overflow: hidden;
-}
-ol.breadcrumb-responsive > li.show {
   display: inline-block;
 }
 ol.breadcrumb-responsive > li.ellipsis {
-  text-overflow: ellipsis;
-  -o-text-overflow: ellipsis;
   overflow: hidden;
+  text-overflow: ellipsis;
 }

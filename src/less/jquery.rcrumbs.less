@@ -1,27 +1,15 @@
 @import "variables";
 
-body, html {
-  //Avoid displaying horizontal browser scrollbar when shrinking the browser window faster than the crumb
-  //hiding animation.
-  overflow-x: hidden;
-}
-
 ol.breadcrumb-responsive {
   white-space: nowrap;
-  //needed to remove bullets on IE7
-  list-style: none;
 
   > li {
     //Avoid small vertical shift on li when animation is executed on IE browser.
     //This happen because jquery animation set overflow:hidden when animating an element.
-    overflow: hidden;
-    &.show {
-      display: inline-block;
-    }
+    display: inline-block;
     &.ellipsis {
-      text-overflow: ellipsis;
-      -o-text-overflow: ellipsis;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
   }
 }
