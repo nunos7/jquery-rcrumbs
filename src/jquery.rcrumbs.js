@@ -1,17 +1,18 @@
-/**
- * rCrumbs - jQuery plugin
+/* jQuery responsive breadcrumbs plugin jQuery plugin
  * https://github.com/cm0s/jquery-rcrumbs
  *
- * Copyright (c) 2013 Nicolas Forney.
- * Distributed under the terms of the MIT license.
+ * Copyright (c) 2016, Nicolas Forney 
+ * Released under the MIT licence 
+ *
+ * version: 1.1.0 
+ * 2016/02/13
  */
-
-(function ($, window, document, undefined) {
+(function($, window, document, undefined) {
   'use strict';
 
   var rcrumbs = 'rcrumbs',
     defaults = {
-      version: '@@version',
+      version: '1.1.0',
       callback: {
         preCrumbsListDisplay: $.noop, //A function which is executed before the crumbs list is rendered
         preCrumbDisplay: $.noop, //A function which is executed before each crumb is rendered
@@ -25,7 +26,10 @@
       animation: {
         activated: true, // Activate an animation when crumbs are displayed/hidden on a window resize
         speed: 400 // Animation speed (activated option must be set to true)
-      }
+      },
+      moreTemplate: `<li class="hide dropdown rc-more-items"><a data-toggle="dropdown">...</a>
+          <ul class="dropdown-menu"></div>
+        </li>`,
     };
 
   // Plugin constructor
@@ -44,11 +48,12 @@
 
   Plugin.prototype = {
 
-    version: function () {
+    version: function() {
       return this.options.version;
     },
 
-    _init: function () {
+    _init: function() {
+      var that = this;
 
       //Variables declaration
       this.nbCrumbDisplayed = 0;
@@ -56,21 +61,33 @@
       this.$crumbs = $('li', this.$crumbsList);
       this.$lastCrumb = this.$crumbs.last();
       this.$firstCrumb = this.$crumbs.first();
-      this.reversedCrumbs = $('li', this.$crumbsList).get().reverse();
       this.lastNbCrumbDisplayed = 0;
       this.totalCrumbsWidth = 0;
       this.fixedCrumbsWidth = 0;
-      this._initCrumbs();
 
       // Insert a hidden ellipsis at the front of the list
-      this.$frontEllipsis = $('<a href="" class="hide">...</a>').insertBefore(this.$firstCrumb);
+      //this.$frontEllipsis = $('<a href="" >...</a>').insertBefore(this.$firstCrumb);
+      this.$frontEllipsis = $(this.options.moreTemplate).insertAfter(this.$firstCrumb);
+
+      this.$dropdownMenu = this.$frontEllipsis.children(".dropdown-menu");
+
+      $('.rc-more-items', this.$crumbsList).on('show.bs.dropdown', function() {
+        that._createDropdownItems();
+      }).on('hide.bs.dropdown', function() {
+        that.$dropdownMenu.empty();
+      })
+
+      this.$crumbs = $('li', this.$crumbsList);
+      this.reversedCrumbs = $('li', this.$crumbsList).get().reverse();
+
+      this._initCrumbs();
 
       if (this.options.nbFixedCrumbs > 0) {
         var nbCrumbs = this.$crumbs.length;
         this.$crumbs = $('li', this.$crumbsList).slice(this.options.nbFixedCrumbs, nbCrumbs);
         this.reversedCrumbs = $('li', this.$crumbsList).slice(this.options.nbFixedCrumbs, nbCrumbs).get().reverse();
-        var that = this;
-        $('li', this.$crumbsList).slice(0, this.options.nbFixedCrumbs).each(function (index, crumb) {
+
+        $('li', this.$crumbsList).slice(0, this.options.nbFixedCrumbs).each(function(index, crumb) {
           that.totalCrumbsWidth += $(crumb).data('width');
           $(crumb).removeClass('hide');
         });
@@ -87,8 +104,8 @@
      * Get the width of a hidden DOM element without displaying it in the browser.
      * @param element DOM element from which the width will be retrieved.
      */
-    _getHiddenElWidth: function (element) {
-      var result,
+    _getHiddenElWidth: function(element) {
+      var result, result2,
         elementClone = $(element).clone(false);
 
       elementClone.css({
@@ -109,26 +126,26 @@
 
       elementClone.remove();
 
-      return result;
+      return result + 5; // padding of divider content 
     },
 
-    _initCrumbs: function () {
+    _initCrumbs: function() {
       var that = this;
 
       //Remove text node in order to avoid displaying white spaces between li elements and thus make width
       //calculation for the breadcrumbs resize easier.
-      $(this.$crumbsList).contents().filter(function () {
-        return this.nodeType === 3;  //3 => Text node
+      $(this.$crumbsList).contents().filter(function() {
+        return this.nodeType === 3; //3 => Text node
       }).remove();
 
       //For each li element save its width
-      $.each(this.$crumbs, function (key, value) {
+      $.each(this.$crumbs, function(key, value) {
         var $crumb = $(this);
         that._storeCrumbWidth($crumb);
       });
 
       if (this.options.nbFixedCrumbs > 0) {
-        $(this.$crumbs).slice(0, this.options.nbFixedCrumbs).each(function (index, crumb) {
+        $(this.$crumbs).slice(0, this.options.nbFixedCrumbs).each(function(index, crumb) {
           that.fixedCrumbsWidth += $(crumb).data('width');
         });
       }
@@ -139,7 +156,7 @@
      * @param $crumb li element on which its width will be stored
      * @return calculated crumb width
      */
-    _storeCrumbWidth: function ($crumb) {
+    _storeCrumbWidth: function($crumb) {
       var crumbWidth = this._getHiddenElWidth($crumb);
       $crumb.data('width', crumbWidth);
       return crumbWidth;
@@ -148,7 +165,7 @@
     /**
      * @param disableAnimation used to disable the animation even if the animation.activated option is set to true.
      */
-    _showOrHideCrumbsList: function (disableAnimation) {
+    _showOrHideCrumbsList: function(disableAnimation) {
       var that = this;
       this.remainingSpaceToDisplayCrumbs = this.$element.width();
       this.nbCrumbDisplayed = 0;
@@ -156,7 +173,7 @@
 
       if (this.options.nbFixedCrumbs > 0) {
         this.remainingSpaceToDisplayCrumbs -= this.fixedCrumbsWidth;
-        $('li', this.$crumbsList).slice(0, this.options.nbFixedCrumbs).each(function (index, crumb) {
+        $('li', this.$crumbsList).slice(0, this.options.nbFixedCrumbs).each(function(index, crumb) {
           that.totalCrumbsWidth += $(crumb).data('width');
         });
       }
@@ -165,7 +182,7 @@
       this.options.callback.preCrumbsListDisplay(this);
 
       //It's important to loop through a reversed list in order to ensure we first try to display the last element
-      $.each(this.reversedCrumbs, function (key, value) {
+      $.each(this.reversedCrumbs, function(key, value) {
         var $crumb = $(this),
           $nextCrumb = $(that.reversedCrumbs[key + 1]); //May return empty jQuery object
 
@@ -174,21 +191,26 @@
 
       this.lastNbCrumbDisplayed = this.nbCrumbDisplayed;
 
-      var numHidden = $('li.hide').length;
+      var numHidden = $('li.hide', this.$crumbsList).length;
       if (numHidden) {
-        var href = $('li.hide', this.$crumbsList).last().children('a').attr('href');
-        this.$frontEllipsis.attr('href', href);
+        //var href = $('li.hide', this.$crumbsList).last().children('a').attr('href');
+        //this.$frontEllipsis.children('a').attr('href', href);
         this.$frontEllipsis.removeClass('hide');
-
       } else {
         this.$frontEllipsis.addClass('hide');
       }
 
       this.options.callback.postCrumbsListDisplay(this);
-
+    },
+    _createDropdownItems: function() {
+      var that = this;
+      var $items = $('li.hide:not(.more-items)', this.$crumbsList);
+      $items.each(function(index, item) {
+        $(item).clone(false).appendTo(that.$dropdownMenu).removeClass("hide");
+      });
     },
 
-    _showOrHideCrumb: function ($crumb, $nextCrumb, crumbPosition, disableAnimation) {
+    _showOrHideCrumb: function($crumb, $nextCrumb, crumbPosition, disableAnimation) {
       this.options.callback.preCrumbDisplay($crumb);
       var that = this;
       this.remainingSpaceToDisplayCrumbs -= $crumb.data('width');
@@ -223,7 +245,9 @@
 
         if (that.lastNbCrumbDisplayed < (that.nbCrumbDisplayed + 1) && that.options.animation.activated && !disableAnimation) {
           $crumb.width(0);
-          $crumb.animate({width: $crumb.data('width')}, that.options.animation.speed, function () {
+          $crumb.animate({
+            width: $crumb.data('width')
+          }, that.options.animation.speed, function() {
             that.options.callback.postCrumbDisplay($crumb);
           });
         } else {
@@ -233,8 +257,10 @@
       }
 
       function hideCrumbWithAnimation() {
-        $crumb.animate({width: 0}, that.options.animation.speed, function () {
-          $crumb.addClass('hide');
+        $crumb.animate({
+          width: 0
+        }, that.options.animation.speed, function() {
+          $crumb.addClass('hide').css({'width':'auto'});
         });
       }
 
@@ -253,26 +279,38 @@
       }
     },
 
-    _showOrHideCrumbsListOnWindowResize: function () {
+    _showOrHideCrumbsListOnWindowResize: function() {
       var that = this;
-      $(window).resize(function () {
-        var rcrumbWidth = that.$element.width();
-        if (rcrumbWidth < that.totalCrumbsWidth || (that.totalCrumbsWidth + that.nextCrumbToShowWidth) < rcrumbWidth) {
-          $.each(that.reversedCrumbs, function (key, value) { //Stop all crumbs animations
-            var $currentCrumb = $(this);
-            $currentCrumb.stop(true, true);
-          });
 
-          that._showOrHideCrumbsList();
+      var pendingResize = null;
+      var onResize = function() {
+        if (pendingResize === null) {
+          pendingResize = requestAnimationFrame(function() {
+            var rcrumbWidth = that.$element.width();
+            if (rcrumbWidth < that.totalCrumbsWidth || (that.totalCrumbsWidth + that.nextCrumbToShowWidth) < rcrumbWidth) {
+              $.each(that.reversedCrumbs, function(key, value) { //Stop all crumbs animations
+                var $currentCrumb = $(this);
+                $currentCrumb.stop(true, true);
+              });
+              
+              that._showOrHideCrumbsList();
+            }
+            //Disable ellipsis on the last crumb when there is enough space
+            if (rcrumbWidth >= that.totalCrumbsWidth && that.$lastCrumb.hasClass('ellipsis')) {
+              that._disableEllipsis(that.$lastCrumb);
+            }
+            
+            //hack to close dropdown menu
+            $(document).trigger('click');
+            
+            pendingResize = null;
+          });
         }
-        //Disable ellipsis on the last crumb when there is enough space
-        if (rcrumbWidth >= that.totalCrumbsWidth && that.$lastCrumb.hasClass('ellipsis')) {
-          that._disableEllipsis(that.$lastCrumb);
-        }
-      });
+      }
+      $(window).resize(onResize);
     },
 
-    _disableEllipsis: function ($crumb) {
+    _disableEllipsis: function($crumb) {
       $crumb.css({
         'width': 'auto'
       });
@@ -281,7 +319,7 @@
   };
 
 
-  $.fn[rcrumbs] = function (methodNameOrObject) {
+  $.fn[rcrumbs] = function(methodNameOrObject) {
     // When the function parameter is a string the value is used to call the corresponding plugin method. If the
     // argument is an object or a falsy value the Plugin is instantiated
     // Only public method (not prefixed with an underscore) can be called.
@@ -295,7 +333,7 @@
       }
     } else if (typeof methodNameOrObject === 'object' || !methodNameOrObject) {
       // Plugin wrapper around the constructor to prevent against multiple instantiations
-      return this.each(function () {
+      return this.each(function() {
         if (!$.data(this, 'plugin_' + rcrumbs)) {
           $.data(this, 'plugin_' + rcrumbs, new Plugin(this, methodNameOrObject));
         } else {
