@@ -28,6 +28,7 @@
         speed: 400 // Animation speed (activated option must be set to true)
       },
       moreTemplate: '<li class="hide dropdown rc-more-items"><a data-toggle="dropdown">...</a><ul class="dropdown-menu"></div></li>',
+      dropdownItemPaddingLeft: 10, // Padding left to increment 
     };
 
   // Plugin constructor
@@ -201,10 +202,11 @@
       this.options.callback.postCrumbsListDisplay(this);
     },
     _createDropdownItems: function () {
-      var that = this;
+      var that = this, pl = 0;
       var $items = $('li.hide:not(.more-items)', this.$crumbsList);
       $items.each(function (index, item) {
-        $(item).clone(false).appendTo(that.$dropdownMenu).removeClass('hide');
+        pl += that.options.dropdownItemPaddingLeft;
+        $(item).clone(false).css({ 'padding-left': pl + 'px' }).appendTo(that.$dropdownMenu).removeClass('hide');
       });
     },
 
