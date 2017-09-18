@@ -201,11 +201,12 @@
       this.options.callback.postCrumbsListDisplay(this);
     },
     _createDropdownItems: function () {
-      var that = this;
-      var $items = $('li.hide:not(.more-items)', this.$crumbsList);
-      $items.each(function (index, item) {
-        $(item).clone(false).appendTo(that.$dropdownMenu).removeClass('hide');
-      });
+        var that = this, pl = 0;
+        var $items = $('li.hide:not(.more-items)', this.$crumbsList);
+        $items.each(function (index, item) {
+            pl += that.options.dropdownItemPaddingLeft;
+            $(item).clone(false).css({ 'padding-left': pl + 'px' }).appendTo(that.$dropdownMenu).removeClass("hide");
+        });
     },
 
     _showOrHideCrumb: function ($crumb, $nextCrumb, crumbPosition, disableAnimation) {
