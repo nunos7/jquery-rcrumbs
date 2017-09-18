@@ -5,7 +5,7 @@
  * Released under the MIT licence 
  *
  * version: 1.1.0 
- * 2017/08/30
+ * 2017/09/18
  */
 (function ($, window, document, undefined) {
   'use strict';
@@ -28,6 +28,7 @@
         speed: 400 // Animation speed (activated option must be set to true)
       },
       moreTemplate: '<li class="hide dropdown rc-more-items"><a data-toggle="dropdown">...</a><ul class="dropdown-menu"></div></li>',
+      dropdownItemPaddingLeft: 10, // Padding left to increment 
     };
 
   // Plugin constructor
@@ -201,12 +202,12 @@
       this.options.callback.postCrumbsListDisplay(this);
     },
     _createDropdownItems: function () {
-        var that = this, pl = 0;
-        var $items = $('li.hide:not(.more-items)', this.$crumbsList);
-        $items.each(function (index, item) {
-            pl += that.options.dropdownItemPaddingLeft;
-            $(item).clone(false).css({ 'padding-left': pl + 'px' }).appendTo(that.$dropdownMenu).removeClass("hide");
-        });
+      var that = this, pl = 0;
+      var $items = $('li.hide:not(.more-items)', this.$crumbsList);
+      $items.each(function (index, item) {
+        pl += that.options.dropdownItemPaddingLeft;
+        $(item).clone(false).css({ 'padding-left': pl + 'px' }).appendTo(that.$dropdownMenu).removeClass('hide');
+      });
     },
 
     _showOrHideCrumb: function ($crumb, $nextCrumb, crumbPosition, disableAnimation) {

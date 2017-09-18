@@ -1,9 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\dist",
     "\\libs",
     "\\src"
   ],
+  "SelectedNode": "\\src\\jquery.rcrumbs.js",
   "PreviewInSolutionExplorer": false
 }
